@@ -39,7 +39,13 @@ INSTALLED_APPS = (
     #'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'roster',
+)
+
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -92,7 +98,7 @@ MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media_root')
 
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.join(PROJECT_PATH, 'static-media')
+STATIC_ROOT = os.path.join(PROJECT_PATH, 'static_media')
 
 STATIC_URL = '/static/'
 

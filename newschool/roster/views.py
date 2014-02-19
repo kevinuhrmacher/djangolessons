@@ -1,8 +1,54 @@
-from django.shortcuts import render
+#from django.shortcuts import render
+from roster.models import Course, Student
+from django.shortcuts import render, get_object_or_404, redirect, render_to_response
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
-from django.shortcuts import render
-
 def home(request):
-    context = {'message': 'This is a dynamic message variable!'}
-    return render(request, "base.html", context)
+    context = {
+        'student_count': Student.objects.count(),
+        'course_count': Course.objects.count(),
+    }
+    return render(request, "roster/home.html", context)
+    
+def course(request, pk):
+    #course = Course.objects.order_by('?')[0]
+    course = get_object_or_404(Course, id=pk)
+    return render(request, "roster/course.html", {'course':course})
+
+def courseList(request):
+    course_list = Course.objects.all()
+    paginator = Paginator(course_list, 25)
+    page = request.GET.get('page')
+    try:
+        courses= paginator.page(page)
+    except PageNotAnInteger:
+        #if page is not an integer, deliver first page
+        courses= paginator.page(1)
+    except EmptyPage:
+        #if page is out of range, deliver last page of results
+        courses= paginator.page(paginator.num_pages)
+    
+    return render(request, 'roster/course_list.html', {"courses": courses})
+
+def student(request, pk):
+    #student = Student.objects.order_by('?')[0]
+    student = get_object_or_404(Student, id=pk)
+    return render(request, "roster/student.html", {'student':student})
+
+def studentList(request):
+    student_list = Student.objects.all()
+    paginator = Paginator(student_list, 25)
+    page = request.GET.get('page')
+    try:
+        students= paginator.page(page)
+    except PageNotAnInteger:
+        #if page is not an integer, deliver first page
+        students= paginator.page(1)
+    except EmptyPage:
+        #if page is out of range, deliver last page of results
+        students= paginator.page(paginator.num_pages)
+    
+    return render(request, 'roster/student_list.html', {"students": students})
+
+
